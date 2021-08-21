@@ -1,41 +1,40 @@
 
-import React, { FunctionComponent, useState } from 'react';
+import * as React from 'react';
+import Field from './field'
+import Action from './action'
 
-interface PlayerProps {
-    xi: number,
-    yi: number,
+export interface PlayerProps {
+  key: string,
+  field: Field,
+  lastPlayer?: string,
 }
 
-interface DraggableState {
-  isDown: boolean;
-  posX: number;
-  posY: number;
-  screenX: number;
-  screenY: number;
+export interface PlayerState{
+  radius: number,
+  x: number,
+  y: number,
+}
+
+export default class Player extends React.Component<PlayerProps, PlayerState> {
+  constructor(props: PlayerProps) {
+    super(props);
+
+    this.state = {
+      radius: 40,
+      x: 0,
+      y: 0,
+    }
+  }
+
+  public render() {
+    return (
+      <svg height={this.state.radius * 2} width={this.state.radius * 2}>
+        <circle cx='0' cy='0' r='40' stroke='black' fill='red'/>
+      </svg>
+    );
+  }
 }
 
 
-export const Player: FunctionComponent<PlayerProps> = (props) => {
-    const [actions, setActions] = useState([]);
-    return <div>
-        <svg>
-            <circle>
-            </circle>
-        </svg>
-        {actions.map((action: Action) => {
-            return <Action key={action.key}/>
-        })}
-    </div>
-}
 
-
-
-const onMouseDown: (state: DraggableState) => (e: MouseEvent) => {
-      return {
-        ...state,
-        isDown: true,
-        screenX: e.screenX,
-        screenY: e.screenY
-      }
-    },
 

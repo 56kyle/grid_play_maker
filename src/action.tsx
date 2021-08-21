@@ -1,21 +1,30 @@
+import * as React from 'react';
+import Player from './player';
+import Vector from './vector';
 
-import React from 'react';
-
-
-interface ActionProps {
+export interface ActionProps {
+  key: string,
+  player: Player,
 }
 
+export interface ActionState {
+}
 
-export class Action<ActionProps> {
-    static defaultProps = {
+export default class Action extends React.Component<ActionProps, ActionState> {
+  constructor(props: ActionProps) {
+    super(props);
+
+    this.state = {
     }
+  }
 
-    constructor() {
-    }
-
-    render() {
-
-    }
+  public render() {
+    return (
+      <div>
+        
+      </div>
+    );
+  }
 }
 
 
