@@ -42,15 +42,10 @@ export default class Field extends React.Component<FieldProps, FieldState> {
 
   deletePlayer = (key: string) => {
     this.setState((prevState, props) => {
-      if (prevState.lastPlayer) {
-        let currentPlayer = this.state.players.get(key)
-        prevState.players.delete(key);
-        let state = {lastPlayer: currentPlayer?.props.lastPlayer, players: prevState.players}
-        return state;
-      } else {
-        
-
-      }
+      let currentPlayer = this.state.players.get(key)
+      let state = {lastPlayer: currentPlayer?.props.lastPlayer ? currentPlayer?.props.lastPlayer : prevState.lastPlayer, players: prevState.players}
+      state.players.delete(key);
+      return state;
     })
   }
 
@@ -60,7 +55,7 @@ export default class Field extends React.Component<FieldProps, FieldState> {
         {this.state.players.map((player: Player) => {
           return <Player key={player.key} field={this} />;
         })}
-        {markings.map((marking: Marking) => {
+        {this.state.markings.map((marking: Marking) => {
           return <Marking key={marking.key} field={this} />;
         })}
       </div>
