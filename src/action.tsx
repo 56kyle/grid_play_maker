@@ -3,7 +3,7 @@ import Player from './player';
 import Vector from './vector';
 
 export interface ActionProps {
-  key: string,
+  key: number,
   player: Player,
 }
 
