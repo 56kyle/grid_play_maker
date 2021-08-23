@@ -1,10 +1,12 @@
 
-import * as React from 'react';
+import React from 'react';
 import Field from './field'
 import Action from './action'
+import {SVGDraggable} from 'typescript-react-draggable';
 
 export interface PlayerProps {
   key: number,
+  location: number,
   field: Field,
 }
 
@@ -26,16 +28,13 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
     }
   }
 
-  onClick = (e: React.MouseEvent<SVGCircleElement, MouseEvent>) => {
-    e.stopPropagation();
-    console.log('circle - onClick');
-  }
-
   public render() {
     return (
-      <svg height={this.state.radius * 2} width={this.state.radius * 2}>
-        <circle cx='0' cy='0' r='40' stroke='black' fill='red' onClick={this.onClick}/>
-      </svg>
+      <SVGDraggable>
+        <svg height={this.state.radius * 2} width={this.state.radius * 2}>
+          <circle cx='0' cy='0' r='40' stroke='black' fill='red'/>
+        </svg>
+      </SVGDraggable>
     );
   }
 }
