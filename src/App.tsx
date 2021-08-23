@@ -9,7 +9,7 @@ function App() {
       <header className="App-header">
       </header>
       <body className="App-body">
-        <Field />
+        <Field width={1400} height={800} />
       </body>
     </div>
   );

@@ -1,18 +1,15 @@
 import * as React from 'react';
 import Player from './player';
-import Marking from './marking';
-import { v4 as uuidv4 } from 'uuid';
-import { stringify } from 'querystring';
+import './field.css';
 
 export interface FieldProps {
-  key: string,
+  height: number,
+  width: number,
 }
 
 export interface FieldState {
-  players: Map<string, Player>,
-  lastPlayer?: string,
-  markings: Map<string, Marking>,
-  lastMarking?: string,
+  selection?: Player,
+  players: Player[],
 }
 
 export default class Field extends React.Component<FieldProps, FieldState> {
@@ -20,49 +17,56 @@ export default class Field extends React.Component<FieldProps, FieldState> {
     super(props);
 
     this.state = {
-      players: new Map<string, Player>(),
-      markings: new Map<string, Marking>(),
-    }
+      players: [],
+    };
   }
 
   addPlayer = () => {
-    this.setState((state, props) => {
-      let player = new Player({key: uuidv4(), field: this, lastPlayer: this.state.lastPlayer})
-      state.players.set(player.props.key, player);
+    console.log('field - addPlayer');
+    this.setState((prevState, props) => {
+      let state = {players: prevState.players};
+      let player = new Player({key: this.state.players.length, location: this.state.players.length, field: this});
+      state.players.push(player);
       return state;
     })
   }
 
   undoPlayer = () => {
-    if (this.state.lastPlayer) {
-      this.deletePlayer(this.state.lastPlayer);
-    } else {
-    }
+    console.log('field - undoPlayer');
+    this.setState((prevState, props) => {
+      let state = {players: prevState.players};
+      state.players.pop();
+      return state;
+    })
   }
 
-  deletePlayer = (key: string) => {
-    this.setState((prevState, props) => {
-      if (prevState.lastPlayer) {
-        let currentPlayer = this.state.players.get(key)
-        prevState.players.delete(key);
-        let state = {lastPlayer: currentPlayer?.props.lastPlayer, players: prevState.players}
-        return state;
-      } else {
-        
-
-      }
-    })
+  sidelines = () => {
+    return (
+      <g className="sidelines">
+        <line x1='0' y1='0' x2='0' y2={this.props.height} fill='white' stroke='white' strokeWidth={this.props.width * .05}/>
+        <line x1={this.props.width} y1='0' x2={this.props.width} y2={this.props.height} fill='white' stroke='white' strokeWidth={this.props.width * .05}/>
+      </g>
+    );
   }
 
   public render() {
     return (
-      <div className="Field">
-        {this.state.players.map((player: Player) => {
-          return <Player key={player.key} field={this} />;
-        })}
-        {markings.map((marking: Marking) => {
-          return <Marking key={marking.key} field={this} />;
-        })}
+      <div className="Wrapper">
+        <svg className="Field" height={this.props.height} width={this.props.width}>
+          {this.sidelines()}
+          {this.state.players.map((player: Player) => {
+            console.log(this);
+            return (<Player key={player.props.key} location={player.props.location} field={this} />);
+          })}
+        </svg>
+        <div className="UI">
+          <button className="player-button" onClick={(e) => {
+            this.addPlayer();
+          }}/>
+          <button className="player-button" onClick={(e) => {
+            this.undoPlayer();
+          }}/>
+        </div>
       </div>
     );
   }
